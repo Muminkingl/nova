@@ -69,11 +69,6 @@ export default function ProfitsPage() {
     loadData();
   }, [dateFrom, dateTo, selectedCustomerId, selectedCategory]);
 
-  // Unique categories list from profitItems
-  const categories = Array.from(
-    new Set(profitItems.map((item) => item.category).filter(Boolean))
-  ) as string[];
-
   // Running aggregates
   const totalSales = profitItems.reduce((sum, item) => sum + item.revenue, 0);
   const totalDiscounts = profitItems.reduce((sum, item) => sum + item.discount, 0);

@@ -4,6 +4,8 @@ import * as db from "@/lib/supabase/customers";
 import { Customer } from "@/types";
 import { revalidatePath } from "next/cache";
 
+export type { CustomerWithStats } from "@/lib/supabase/customers";
+
 export async function getCustomersAction() {
   return await db.getCustomers();
 }

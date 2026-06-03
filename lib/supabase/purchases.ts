@@ -48,7 +48,7 @@ export async function getPurchases(): Promise<{
  */
 export async function getPurchaseById(id: string): Promise<{
   data: {
-    purchase: Purchase & { suppliers: { name: string } | null };
+    purchase: Purchase & { suppliers: { id: string; name: string } | null };
     items: (PurchaseItem & { items: { name: string; unit: string } | null })[];
     payments: SupplierPayment[];
   } | null;

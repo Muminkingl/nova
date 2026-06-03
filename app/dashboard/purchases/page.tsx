@@ -1,6 +1,5 @@
-import { getPurchasesAction } from "@/app/actions/items";
 import { getSuppliersAction } from "@/app/actions/suppliers";
-import { getPurchasesAction as getRealPurchasesAction } from "@/app/actions/purchases";
+import { getPurchasesAction } from "@/app/actions/purchases";
 import PurchasesTableWrapper from "./PurchasesTableWrapper";
 
 export const metadata = {
@@ -10,7 +9,7 @@ export const metadata = {
 
 export default async function PurchasesPage() {
   const [purchasesRes, suppliersRes] = await Promise.all([
-    getRealPurchasesAction(),
+    getPurchasesAction(),
     getSuppliersAction(),
   ]);
 

@@ -4,6 +4,8 @@ import * as db from "@/lib/supabase/suppliers";
 import { Supplier } from "@/types";
 import { revalidatePath } from "next/cache";
 
+export type { SupplierWithStats } from "@/lib/supabase/suppliers";
+
 export async function getSuppliersAction() {
   return await db.getSuppliers();
 }

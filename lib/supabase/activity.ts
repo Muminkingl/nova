@@ -2,6 +2,7 @@ import { supabase } from "./client";
 import { cookies } from "next/headers";
 import { getUserProfile } from "./users";
 import { ActivityLog } from "@/types";
+import { verifyValue } from "@/lib/security";
 
 export type ActivityLogFilters = {
   userName?: string;
@@ -24,8 +25,11 @@ export async function logActivity(params: {
 }): Promise<void> {
   try {
     const cookieStore = await cookies();
-    const sessionRole = cookieStore.get("session")?.value;
-    const sessionUserId = cookieStore.get("session_user_id")?.value;
+    const sessionCookie = cookieStore.get("session")?.value;
+    const userIdCookie = cookieStore.get("session_user_id")?.value;
+
+    const sessionRole = await verifyValue(sessionCookie);
+    const sessionUserId = await verifyValue(userIdCookie);
 
     let userId: string | null = null;
     let userName = "system";

@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { supabase } from "@/lib/supabase/client";
 import { getUserProfile } from "@/lib/supabase/users";
+import { signValue } from "@/lib/security";
 
 export interface FormState {
   error?: string;
@@ -12,7 +13,7 @@ export interface FormState {
 
 /**
  * Server Action to handle user login.
- * Supports hardcoded admin/root and Supabase Auth.
+ * Supports environment-configured admin/root and Supabase Auth.
  */
 export async function loginAction(
   prevState: FormState | undefined,
@@ -25,10 +26,14 @@ export async function loginAction(
     return { error: "Please fill in all fields." };
   }
 
-  // 1. Hardcoded validation: admin / root
-  if (username === "admin" && password === "root") {
+  // 1. Environment-configured validation: admin / rootadmin365123
+  const adminUsername = process.env.ADMIN_USERNAME || "admin";
+  const adminPassword = process.env.ADMIN_PASSWORD || "rootadmin365123";
+
+  if (username === adminUsername && password === adminPassword) {
     const cookieStore = await cookies();
-    cookieStore.set("session", "admin", {
+    const signedSession = await signValue("admin");
+    cookieStore.set("session", signedSession, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       maxAge: 60 * 60 * 24, // 1 day
@@ -66,9 +71,10 @@ export async function loginAction(
       return { error: "This user account has been deactivated." };
     }
 
-    // 4. Set session cookies
+    // 4. Set session cookies (signed to prevent client-side manipulation)
     const cookieStore = await cookies();
-    cookieStore.set("session", profile.role, {
+    const signedSession = await signValue(profile.role);
+    cookieStore.set("session", signedSession, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       maxAge: 60 * 60 * 24, // 1 day
@@ -76,7 +82,8 @@ export async function loginAction(
       path: "/",
     });
     
-    cookieStore.set("session_user_id", userId, {
+    const signedUserId = await signValue(userId);
+    cookieStore.set("session_user_id", signedUserId, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       maxAge: 60 * 60 * 24, // 1 day

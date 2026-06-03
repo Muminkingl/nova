@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import { verifyValue } from "@/lib/security";
 
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
-  const session = request.cookies.get("session")?.value; // 'admin' | 'staff'
+  const sessionCookie = request.cookies.get("session")?.value;
+  const session = sessionCookie ? await verifyValue(sessionCookie) : null; // Verified: 'admin' | 'staff' | null
 
   const isDashboardRoute = path.startsWith("/dashboard");
   const isLoginRoute = path === "/login";

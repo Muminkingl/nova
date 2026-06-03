@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { supabase } from "./client";
 import { supabaseAdmin } from "./adminClient";
 import { UserProfile } from "@/types";
+import { verifyValue } from "@/lib/security";
 
 export type UserDirectoryEntry = UserProfile & {
   email: string;
@@ -29,11 +30,13 @@ export async function getUserProfile(userId: string): Promise<UserProfile | null
  */
 export async function getUserRole(): Promise<'admin' | 'staff'> {
   const cookieStore = await cookies();
-  const sessionRole = cookieStore.get("session")?.value;
+  const sessionCookie = cookieStore.get("session")?.value;
+  const sessionRole = await verifyValue(sessionCookie);
   if (sessionRole === "admin") return "admin";
   if (sessionRole === "staff") return "staff";
 
-  const sessionUserId = cookieStore.get("session_user_id")?.value;
+  const userIdCookie = cookieStore.get("session_user_id")?.value;
+  const sessionUserId = await verifyValue(userIdCookie);
   if (sessionUserId) {
     const profile = await getUserProfile(sessionUserId);
     if (profile && profile.is_active) {
