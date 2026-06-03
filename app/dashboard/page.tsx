@@ -329,28 +329,28 @@ export default function DashboardOverviewPage() {
                   Full Analytics <ArrowUpRight className="w-3 h-3 ml-1" />
                 </Link>
               </div>
-              <div className="flex-1 overflow-y-auto">
+              <div className="flex-1 overflow-auto">
                 {bestSellers.length === 0 ? (
                   <div className="h-full flex items-center justify-center text-xs text-muted-foreground">
                     No sales recorded yet.
                   </div>
                 ) : (
-                  <table className="w-full text-xs text-left">
+                  <table className="w-full text-xs text-left min-w-[380px]">
                     <thead>
                       <tr className="text-muted-foreground border-b border-border/60 pb-2 font-medium">
-                        <th className="py-2">Item</th>
-                        <th className="py-2 text-right">Sold</th>
-                        <th className="py-2 text-right">Revenue</th>
-                        <th className="py-2 text-right text-emerald-500">Profit</th>
+                        <th className="py-2 pr-3">Item</th>
+                        <th className="py-2 px-3 text-right">Sold</th>
+                        <th className="py-2 px-3 text-right">Revenue</th>
+                        <th className="py-2 pl-3 text-right text-emerald-500">Profit</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-border/40">
                       {bestSellers.map((item, idx) => (
                         <tr key={idx} className="hover:bg-secondary/20 transition-colors">
-                          <td className="py-2.5 font-medium text-foreground truncate max-w-[120px]">{item.name}</td>
-                          <td className="py-2.5 text-right font-medium text-muted-foreground">{item.units_sold}</td>
-                          <td className="py-2.5 text-right font-medium text-muted-foreground">{item.revenue.toLocaleString()}</td>
-                          <td className="py-2.5 text-right font-bold text-emerald-500">{item.profit.toLocaleString()}</td>
+                          <td className="py-2.5 pr-3 font-medium text-foreground truncate max-w-[120px]">{item.name}</td>
+                          <td className="py-2.5 px-3 text-right font-medium text-muted-foreground">{item.units_sold}</td>
+                          <td className="py-2.5 px-3 text-right font-medium text-muted-foreground">{item.revenue.toLocaleString()}</td>
+                          <td className="py-2.5 pl-3 text-right font-bold text-emerald-500">{item.profit.toLocaleString()}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -367,28 +367,28 @@ export default function DashboardOverviewPage() {
                   All Customers <ArrowUpRight className="w-3 h-3 ml-1" />
                 </Link>
               </div>
-              <div className="flex-1 overflow-y-auto">
+              <div className="flex-1 overflow-auto">
                 {topCustomers.length === 0 ? (
                   <div className="h-full flex items-center justify-center text-xs text-muted-foreground">
                     No debtor records.
                   </div>
                 ) : (
-                  <table className="w-full text-xs text-left">
+                  <table className="w-full text-xs text-left min-w-[380px]">
                     <thead>
                       <tr className="text-muted-foreground border-b border-border/60 pb-2 font-medium">
-                        <th className="py-2">Customer</th>
-                        <th className="py-2 text-right">Invoiced</th>
-                        <th className="py-2 text-right">Paid</th>
-                        <th className="py-2 text-right text-amber-500">Owes</th>
+                        <th className="py-2 pr-3">Customer</th>
+                        <th className="py-2 px-3 text-right">Invoiced</th>
+                        <th className="py-2 px-3 text-right">Paid</th>
+                        <th className="py-2 pl-3 text-right text-amber-500">Owes</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-border/40">
                       {topCustomers.map((cust, idx) => (
                         <tr key={idx} className="hover:bg-secondary/20 transition-colors">
-                          <td className="py-2.5 font-medium text-foreground truncate max-w-[120px]">{cust.name}</td>
-                          <td className="py-2.5 text-right font-medium text-muted-foreground">{cust.totalInvoiced.toLocaleString()}</td>
-                          <td className="py-2.5 text-right font-medium text-muted-foreground">{cust.totalPaid.toLocaleString()}</td>
-                          <td className="py-2.5 text-right font-bold text-amber-500">{cust.debt.toLocaleString()}</td>
+                          <td className="py-2.5 pr-3 font-medium text-foreground truncate max-w-[120px]">{cust.name}</td>
+                          <td className="py-2.5 px-3 text-right font-medium text-muted-foreground">{cust.totalInvoiced.toLocaleString()}</td>
+                          <td className="py-2.5 px-3 text-right font-medium text-muted-foreground">{cust.totalPaid.toLocaleString()}</td>
+                          <td className="py-2.5 pl-3 text-right font-bold text-amber-500">{cust.debt.toLocaleString()}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -405,28 +405,28 @@ export default function DashboardOverviewPage() {
                   All Suppliers <ArrowUpRight className="w-3 h-3 ml-1" />
                 </Link>
               </div>
-              <div className="flex-1 overflow-y-auto">
+              <div className="flex-1 overflow-auto">
                 {topSuppliers.length === 0 ? (
                   <div className="h-full flex items-center justify-center text-xs text-muted-foreground">
                     No supplier liabilities.
                   </div>
                 ) : (
-                  <table className="w-full text-xs text-left">
+                  <table className="w-full text-xs text-left min-w-[380px]">
                     <thead>
                       <tr className="text-muted-foreground border-b border-border/60 pb-2 font-medium">
-                        <th className="py-2">Supplier</th>
-                        <th className="py-2 text-right">Purchased</th>
-                        <th className="py-2 text-right">Paid</th>
-                        <th className="py-2 text-right text-orange-500">Owe</th>
+                        <th className="py-2 pr-3">Supplier</th>
+                        <th className="py-2 px-3 text-right">Purchased</th>
+                        <th className="py-2 px-3 text-right">Paid</th>
+                        <th className="py-2 pl-3 text-right text-orange-500">Owe</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-border/40">
                       {topSuppliers.map((supp, idx) => (
                         <tr key={idx} className="hover:bg-secondary/20 transition-colors">
-                          <td className="py-2.5 font-medium text-foreground truncate max-w-[120px]">{supp.name}</td>
-                          <td className="py-2.5 text-right font-medium text-muted-foreground">{supp.totalPurchased.toLocaleString()}</td>
-                          <td className="py-2.5 text-right font-medium text-muted-foreground">{supp.totalPaid.toLocaleString()}</td>
-                          <td className="py-2.5 text-right font-bold text-orange-500">{supp.debt.toLocaleString()}</td>
+                          <td className="py-2.5 pr-3 font-medium text-foreground truncate max-w-[120px]">{supp.name}</td>
+                          <td className="py-2.5 px-3 text-right font-medium text-muted-foreground">{supp.totalPurchased.toLocaleString()}</td>
+                          <td className="py-2.5 px-3 text-right font-medium text-muted-foreground">{supp.totalPaid.toLocaleString()}</td>
+                          <td className="py-2.5 pl-3 text-right font-bold text-orange-500">{supp.debt.toLocaleString()}</td>
                         </tr>
                       ))}
                     </tbody>
