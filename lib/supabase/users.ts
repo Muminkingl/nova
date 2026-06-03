@@ -1,6 +1,5 @@
 import { cookies } from "next/headers";
-import { supabase } from "./client";
-import { supabaseAdmin } from "./adminClient";
+import { supabaseAdmin as supabase, supabaseAdmin } from "./adminClient";
 import { UserProfile } from "@/types";
 import { verifyValue } from "@/lib/security";
 

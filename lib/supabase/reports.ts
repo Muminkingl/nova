@@ -1,4 +1,4 @@
-import { supabase } from "./client";
+import { supabaseAdmin as supabase } from "./adminClient";
 import { FinancialOverview, ProfitByItem, StatementEntry, ExpiryAlert } from "@/types";
 
 /**

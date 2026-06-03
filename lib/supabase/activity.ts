@@ -1,4 +1,4 @@
-import { supabase } from "./client";
+import { supabaseAdmin as supabase } from "./adminClient";
 import { cookies } from "next/headers";
 import { getUserProfile } from "./users";
 import { ActivityLog } from "@/types";

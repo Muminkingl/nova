@@ -1,4 +1,4 @@
-import { supabase } from "./client";
+import { supabaseAdmin as supabase } from "./adminClient";
 import { Damage, DamageFormData } from "@/types";
 
 export type DamageWithItem = Damage & {

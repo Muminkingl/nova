@@ -1,4 +1,4 @@
-import { supabase } from "./client";
+import { supabaseAdmin as supabase } from "./adminClient";
 import { Invoice, InvoiceItem, CustomerPayment } from "@/types";
 
 export type InvoiceWithCustomer = Invoice & {

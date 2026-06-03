@@ -1,4 +1,4 @@
-import { supabase } from "./client";
+import { supabaseAdmin as supabase } from "./adminClient";
 import { Purchase, PurchaseItem, SupplierPayment } from "@/types";
 
 export type PurchaseWithSupplier = Purchase & {
