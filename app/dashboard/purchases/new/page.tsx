@@ -2,6 +2,8 @@ import { getSuppliersAction } from "@/app/actions/suppliers";
 import { getItemsAction } from "@/app/actions/items";
 import NewPurchaseForm from "@/components/purchases/NewPurchaseForm";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "New Purchase - Nova Medical ERP",
   description: "Record items shipment received from a supplier",

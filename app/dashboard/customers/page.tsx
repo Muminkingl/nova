@@ -1,6 +1,8 @@
 import { getCustomersAction } from "@/app/actions/customers";
 import CustomersTableWrapper from "./CustomersTableWrapper";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Customers Directory - Nova Medical ERP",
   description: "View and manage registered customers and active credit invoices",

@@ -1,6 +1,8 @@
 import { getItemsAction } from "@/app/actions/items";
 import ItemsTableWrapper from "./ItemsTableWrapper";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Items Catalog - Nova Medical ERP",
   description: "View and manage active medical supply products in the catalog",

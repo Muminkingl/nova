@@ -2,6 +2,8 @@ import { getInvoicesAction } from "@/app/actions/invoices";
 import { getCustomersAction } from "@/app/actions/customers";
 import InvoicesTableWrapper from "./InvoicesTableWrapper";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Invoices Directory - Nova Medical ERP",
   description: "View and create customer sales billing invoices",

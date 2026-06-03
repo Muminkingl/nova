@@ -1,6 +1,8 @@
 import { getSuppliersAction } from "@/app/actions/suppliers";
 import SuppliersTableWrapper from "./SuppliersTableWrapper";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Suppliers Directory - Nova Medical ERP",
   description: "View and manage active supply manufactures and crediting accounts",

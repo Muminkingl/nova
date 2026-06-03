@@ -2,6 +2,8 @@ import { getCustomersAction } from "@/app/actions/customers";
 import { getItemsAction } from "@/app/actions/items";
 import NewInvoiceForm from "@/components/invoices/NewInvoiceForm";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "New Sales Invoice - Nova Medical ERP",
   description: "Create sales billing invoice and deduct stock levels",

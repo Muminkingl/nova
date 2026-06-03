@@ -2,6 +2,8 @@ import { getSuppliersAction } from "@/app/actions/suppliers";
 import { getPurchasesAction } from "@/app/actions/purchases";
 import PurchasesTableWrapper from "./PurchasesTableWrapper";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Purchases Ledger - Nova Medical ERP",
   description: "View and record incoming supplier purchase orders",
