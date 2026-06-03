@@ -89,21 +89,39 @@ export async function getUsers(): Promise<{ data: UserDirectoryEntry[] | null; e
 export async function inviteUser(
   email: string,
   fullName: string,
-  role: 'admin' | 'staff'
+  role: 'admin' | 'staff',
+  password?: string
 ): Promise<{ data: any; error: any }> {
-  // 1. Trigger invitation email via Supabase admin Auth
-  // Determine site URL dynamically or fall back to localhost
-  const host = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-  const { data: inviteRes, error: inviteError } = await supabaseAdmin.auth.admin.inviteUserByEmail(
-    email,
-    { redirectTo: `${host}/login` }
-  );
+  let newUserId: string;
 
-  if (inviteError || !inviteRes || !inviteRes.user) {
-    return { data: null, error: inviteError || new Error("Failed to create invitation link") };
+  if (password) {
+    // 1. Directly create the confirmed user with password
+    const { data: createRes, error: createError } = await supabaseAdmin.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: true,
+      user_metadata: { full_name: fullName }
+    });
+
+    if (createError || !createRes.user) {
+      return { data: null, error: createError || new Error("Failed to create user account.") };
+    }
+
+    newUserId = createRes.user.id;
+  } else {
+    // 1. Trigger invitation email via Supabase admin Auth (fallback)
+    const host = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+    const { data: inviteRes, error: inviteError } = await supabaseAdmin.auth.admin.inviteUserByEmail(
+      email,
+      { redirectTo: `${host}/login` }
+    );
+
+    if (inviteError || !inviteRes || !inviteRes.user) {
+      return { data: null, error: inviteError || new Error("Failed to create invitation link") };
+    }
+
+    newUserId = inviteRes.user.id;
   }
-
-  const newUserId = inviteRes.user.id;
 
   // 2. Insert new profile record in user_profiles
   const { data: profile, error: profileError } = await supabase

@@ -29,8 +29,9 @@ export default function UsersPage() {
   const [showModal, setShowModal] = useState(false);
   const [isPending, startTransition] = useTransition();
 
-  // Invite Form State
-  const [email, setEmail] = useState("");
+  // User Form State
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [role, setRole] = useState<'admin' | 'staff'>("staff");
   const [formError, setFormError] = useState("");
@@ -59,19 +60,32 @@ export default function UsersPage() {
     setFormError("");
     setSuccessMsg("");
 
-    if (!email.trim() || !fullName.trim()) {
+    if (!username.trim() || !fullName.trim() || !password.trim()) {
       setFormError("All fields are required.");
       return;
     }
 
+    if (username.includes(" ") || username.includes("@")) {
+      setFormError("Username cannot contain spaces or '@' symbols.");
+      return;
+    }
+
+    if (password.length < 6) {
+      setFormError("Password must be at least 6 characters.");
+      return;
+    }
+
+    const constructedEmail = `${username.toLowerCase().trim()}@nova.local`;
+
     startTransition(async () => {
-      const res = await inviteUserAction(email.trim(), fullName.trim(), role);
+      const res = await inviteUserAction(constructedEmail, fullName.trim(), role, password);
       if (!res.success) {
-        setFormError(res.error || "Failed to invite user.");
+        setFormError(res.error || "Failed to create user account.");
       } else {
-        setSuccessMsg(`Invitation email sent to ${email}. Profile created.`);
-        setEmail("");
+        setSuccessMsg(`User account '${username}' created successfully.`);
+        setUsername("");
         setFullName("");
+        setPassword("");
         setRole("staff");
         loadUsers();
         setTimeout(() => {
@@ -144,7 +158,7 @@ export default function UsersPage() {
               <thead>
                 <tr className="bg-secondary/40 border-b border-border text-muted-foreground font-bold uppercase tracking-wider text-[10px] select-none">
                   <th className="px-6 py-3.5">Full Name</th>
-                  <th className="px-6 py-3.5">Email Address</th>
+                  <th className="px-6 py-3.5">Username / Email</th>
                   <th className="px-6 py-3.5">Access Role</th>
                   <th className="px-6 py-3.5 text-center">Status</th>
                   <th className="px-6 py-3.5 text-right">Actions</th>
@@ -157,7 +171,15 @@ export default function UsersPage() {
                       <div className="font-semibold text-foreground">{row.full_name}</div>
                       <div className="text-[10px] text-muted-foreground mt-0.5">Joined: {new Date(row.created_at).toLocaleDateString()}</div>
                     </td>
-                    <td className="px-6 py-3.5 font-medium text-foreground">{row.email}</td>
+                     <td className="px-6 py-3.5 font-medium text-foreground">
+                      {row.email.endsWith("@nova.local") ? (
+                        <span className="font-mono bg-secondary/80 px-2 py-0.5 rounded border border-border/40 text-[11px] font-bold text-foreground">
+                          {row.email.split("@")[0]}
+                        </span>
+                      ) : (
+                        row.email
+                      )}
+                    </td>
                     <td className="px-6 py-3.5">
                       <span className={`inline-flex px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase border tracking-wider select-none ${
                         row.role === "admin" 
@@ -224,7 +246,7 @@ export default function UsersPage() {
             <div className="h-14 flex items-center justify-between px-6 border-b border-border bg-secondary/30">
               <div className="flex items-center space-x-2">
                 <Users className="w-4.5 h-4.5 text-primary" />
-                <span className="font-bold text-foreground text-sm uppercase tracking-tight">Invite Team Member</span>
+                <span className="font-bold text-foreground text-sm uppercase tracking-tight">Create User Account</span>
               </div>
               <button
                 onClick={() => {
@@ -266,18 +288,36 @@ export default function UsersPage() {
                 />
               </div>
 
-              {/* Email */}
+              {/* Username */}
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">Email Address</label>
+                <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">Username</label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">
-                    <Mail className="w-4 h-4" />
+                    <UserCheck className="w-4 h-4" />
                   </div>
                   <input
-                    type="email"
-                    placeholder="name@company.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    type="text"
+                    placeholder="e.g. ahmed"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="w-full h-9 pl-9 pr-3 rounded-lg bg-secondary border border-border text-foreground text-xs focus:outline-none focus:ring-1 focus:ring-primary font-mono"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Password */}
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">Account Password</label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground">
+                    <Lock className="w-4 h-4" />
+                  </div>
+                  <input
+                    type="password"
+                    placeholder="At least 6 characters"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     className="w-full h-9 pl-9 pr-3 rounded-lg bg-secondary border border-border text-foreground text-xs focus:outline-none focus:ring-1 focus:ring-primary"
                     required
                   />
@@ -313,16 +353,16 @@ export default function UsersPage() {
                 </button>
                 <button
                   type="submit"
-                  disabled={isPending || !email || !fullName}
+                  disabled={isPending || !username || !fullName || !password}
                   className="flex-1 h-9 rounded-lg bg-primary hover:bg-primary/95 text-primary-foreground text-xs font-bold transition-all shadow-md cursor-pointer select-none active:scale-[0.98] disabled:opacity-50 inline-flex items-center justify-center"
                 >
                   {isPending ? (
                     <>
                       <Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" />
-                      Inviting...
+                      Creating...
                     </>
                   ) : (
-                    "Send Invitation"
+                    "Create Account"
                   )}
                 </button>
               </div>

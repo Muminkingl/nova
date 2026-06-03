@@ -47,8 +47,12 @@ export async function loginAction(
 
   // 2. Supabase Auth validation
   try {
+    const resolvedEmail = username.includes("@") 
+      ? username 
+      : `${username.toLowerCase()}@nova.local`;
+
     const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-      email: username,
+      email: resolvedEmail,
       password: password,
     });
 

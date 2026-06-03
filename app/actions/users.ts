@@ -26,7 +26,8 @@ export async function getUsersAction() {
 export async function inviteUserAction(
   email: string,
   fullName: string,
-  role: 'admin' | 'staff'
+  role: 'admin' | 'staff',
+  password?: string
 ) {
   try {
     const currentRole = await getUserRole();
@@ -34,24 +35,24 @@ export async function inviteUserAction(
       return { success: false, error: "Access denied. Admin role required." };
     }
 
-    const res = await inviteUser(email, fullName, role);
+    const res = await inviteUser(email, fullName, role, password);
     if (res.error) {
       return { success: false, error: String(res.error.message || res.error) };
     }
 
-    // Log the user invitation activity
+    // Log the user invitation or direct creation activity
     await logActivity({
-      action: "user_invited",
+      action: password ? "user_created" : "user_invited",
       entity_type: "user",
       entity_id: res.data.id,
       entity_label: `${fullName} (${email})`,
-      details: { role, invited_by_role: currentRole },
+      details: { role, created_by_role: currentRole },
     });
 
     revalidatePath("/dashboard/users");
     return { success: true, data: res.data };
   } catch (err: any) {
-    return { success: false, error: err.message || "Failed to invite user." };
+    return { success: false, error: err.message || "Failed to register user." };
   }
 }
 
