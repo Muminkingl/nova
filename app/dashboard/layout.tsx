@@ -30,7 +30,9 @@ import {
   Flame,
   UserCheck,
   History,
-  Loader2
+  Loader2,
+  Menu,
+  X
 } from "lucide-react";
 
 function DashboardShell({ children }: { children: React.ReactNode }) {
@@ -38,6 +40,12 @@ function DashboardShell({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
   const [role, setRole] = useState<'admin' | 'staff' | null>(null);
   const [userName, setUserName] = useState("admin");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Close mobile sidebar on route transition
+  useEffect(() => {
+    setIsSidebarOpen(false);
+  }, [pathname]);
 
   const [notifications, setNotifications] = useState(2);
   const [showToast, setShowToast] = useState(false);
@@ -93,8 +101,18 @@ function DashboardShell({ children }: { children: React.ReactNode }) {
         </div>
       )}
 
+      {/* Mobile Sidebar Backdrop Overlay */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-xs transition-opacity lg:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
       {/* 1. LEFT SIDEBAR (Hidden on Print) */}
-      <aside className="w-64 border-r border-border bg-card flex flex-col shrink-0 select-none print:hidden">
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 border-r border-border bg-card flex flex-col shrink-0 select-none print:hidden transform transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${
+        isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+      }`}>
         {/* Sidebar Header */}
         <div className="h-16 flex items-center px-6 border-b border-border space-x-2.5">
           <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary text-primary-foreground shadow-md shadow-primary/20">
@@ -106,6 +124,14 @@ function DashboardShell({ children }: { children: React.ReactNode }) {
               {isAdmin ? "Admin Workspace" : "Staff Account"}
             </span>
           </div>
+          {/* Close Sidebar Button (Mobile only) */}
+          <button
+            onClick={() => setIsSidebarOpen(false)}
+            className="p-1.5 rounded-lg hover:bg-secondary text-muted-foreground hover:text-foreground lg:hidden ml-auto cursor-pointer"
+            title="Close Menu"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
 
         {/* Sidebar Navigation */}
@@ -356,11 +382,21 @@ function DashboardShell({ children }: { children: React.ReactNode }) {
       {/* 2. MAIN LAYOUT CONTAINER */}
       <div className="flex-1 flex flex-col overflow-hidden print:overflow-visible">
         {/* TOP NAVBAR (Hidden on Print) */}
-        <header className="h-16 border-b border-border bg-card/45 flex items-center justify-between px-8 shrink-0 select-none print:hidden">
-          {/* Breadcrumbs */}
-          <div className="flex items-center space-x-2 text-sm select-none">
-            <span className="text-muted-foreground hover:text-foreground cursor-pointer transition-colors">Nova</span>
-            <span className="text-muted-foreground">/</span>
+        <header className="h-16 border-b border-border bg-card/45 flex items-center justify-between px-4 sm:px-8 shrink-0 select-none print:hidden">
+          {/* Mobile hamburger menu & Breadcrumbs */}
+          <div className="flex items-center space-x-3 text-sm select-none">
+            <button
+              onClick={() => setIsSidebarOpen(true)}
+              className="p-2 -ml-2 rounded-lg hover:bg-secondary/60 text-muted-foreground hover:text-foreground lg:hidden cursor-pointer"
+              title="Open Navigation"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+            
+            <div className="hidden sm:flex items-center space-x-2">
+              <span className="text-muted-foreground hover:text-foreground cursor-pointer transition-colors">Nova</span>
+              <span className="text-muted-foreground">/</span>
+            </div>
             <span className="text-foreground font-medium capitalize">
               {pathname === "/dashboard"
                 ? "Overview"
