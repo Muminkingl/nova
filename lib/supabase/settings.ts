@@ -1,4 +1,4 @@
-import { supabase } from "./client";
+import { supabaseAdmin } from "./adminClient";
 import { Settings } from "@/types";
 
 /**
@@ -6,7 +6,7 @@ import { Settings } from "@/types";
  * Auto-creates default configuration if none exist (self-healing database).
  */
 export async function getSettings(): Promise<{ data: Settings | null; error: any }> {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseAdmin
     .from("settings")
     .select("*")
     .eq("id", 1)
@@ -15,7 +15,7 @@ export async function getSettings(): Promise<{ data: Settings | null; error: any
   if (error) {
     // If table exists but row is missing, insert defaults
     if (error.code === "PGRST116" || error.message.includes("0 rows")) {
-      const { data: inserted, error: insertError } = await supabase
+      const { data: inserted, error: insertError } = await supabaseAdmin
         .from("settings")
         .insert([
           {
@@ -45,7 +45,7 @@ export async function updateSettings(data: {
   phone: string | null;
   currency: string;
 }): Promise<{ data: Settings | null; error: any }> {
-  const { data: updated, error } = await supabase
+  const { data: updated, error } = await supabaseAdmin
     .from("settings")
     .update({
       company_name: data.company_name,
@@ -60,3 +60,4 @@ export async function updateSettings(data: {
 
   return { data: updated as Settings | null, error };
 }
+
