@@ -53,7 +53,7 @@ export default function LoginPage() {
                   id="username"
                   name="username"
                   type="text"
-                  placeholder="admin"
+                  placeholder="*********"
                   required
                   autoComplete="username"
                   disabled={pending}
@@ -103,32 +103,7 @@ export default function LoginPage() {
               )}
             </button>
           </form>
-
-          {/* Hint for Demo */}
-          <div className="relative flex py-2 items-center">
-            <div className="flex-grow border-t border-border"></div>
-            <span className="flex-shrink mx-3 text-[11px] text-muted-foreground uppercase tracking-widest font-semibold select-none">
-              Demo Credentials
-            </span>
-            <div className="flex-grow border-t border-border"></div>
-          </div>
-
-          <div className="bg-secondary/50 rounded-lg p-3 border border-border/60 text-xs text-muted-foreground flex flex-col space-y-1">
-            <div className="flex justify-between">
-              <span className="font-medium text-foreground">Username:</span>
-              <code className="bg-background px-1.5 py-0.5 rounded border border-border/80 text-[11px] select-all">admin</code>
-            </div>
-            <div className="flex justify-between">
-              <span className="font-medium text-foreground">Password:</span>
-              <code className="bg-background px-1.5 py-0.5 rounded border border-border/80 text-[11px] select-all">root</code>
-            </div>
-          </div>
         </div>
-
-        {/* Footer */}
-        <p className="text-center text-xs text-muted-foreground">
-          Protected by end-to-end encryption.
-        </p>
       </div>
     </div>
   );
